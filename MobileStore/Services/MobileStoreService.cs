@@ -15,21 +15,17 @@ namespace MobileStore.Services
         {
             dbContext = _db;
         }
-        public async Task<MobileStoreRecord> AddSellRecord(MobileStoreRecord record)
+        public async Task<string> AddSellRecord(MobileStoreRecord record)
         {
             MobileSellRecord sellrecord = new MobileSellRecord();
-            if (record != null)
-            {
-                sellrecord.Id = record.Id;
-                sellrecord.BrandId = record.BrandId;
-                sellrecord.MobileModel = record.MobileModel;
-                sellrecord.Price = record.Price;
-                sellrecord.SellDate = record.SellDate;
-                dbContext.MobileSellRecords.Add(sellrecord);
-                await dbContext.SaveChangesAsync();
-                return record;
-            }
-            return null;
+            sellrecord.Id = record.Id;
+            sellrecord.BrandId = record.BrandId;
+            sellrecord.MobileModel = record.MobileModel;
+            sellrecord.Price = record.Price;
+            sellrecord.SellDate = record.SellDate;
+            dbContext.MobileSellRecords.Add(sellrecord);
+            var result = await dbContext.SaveChangesAsync();
+            return "Data has been saved with id" + result;
         }
         public async Task<string> DeleteSellRecord(int id)
         {
@@ -59,12 +55,10 @@ namespace MobileStore.Services
         }
         public IEnumerable<MobileStoreRecord> GetSellRecord()
         {
-            var record = from sr in dbContext.MobileSellRecords
-                         join
-br in dbContext.MobileBrandRecords
-on sr.BrandId equals br.Id
+            return from sr in dbContext.MobileSellRecords
+                         join br in dbContext.MobileBrandRecords
+                         on sr.BrandId equals br.Id
                          select new MobileStoreRecord { Id = sr.Id, BrandId = br.Id, MobileBrand = br.MobileBrand, MobileModel = sr.MobileModel, Price = sr.Price, SellDate = sr.SellDate };
-            return record;
         }
         public IEnumerable<MobileStoreRecord> GetSellRecord(DateTime fromdt, DateTime todt)
         {
@@ -76,21 +70,17 @@ on sr.BrandId equals br.Id
         {
             return await dbContext.MobileSellRecords.Where(x => x.Id == _id).FirstOrDefaultAsync();
         }
-        public async Task<MobileStoreRecord> UpdateSellRecord(MobileStoreRecord record)
+        public async Task<string> UpdateSellRecord(MobileStoreRecord record)
         {
             MobileSellRecord sellrecord = new MobileSellRecord();
-            if (record != null)
-            {
-                sellrecord.Id = record.Id;
-                sellrecord.BrandId = record.BrandId;
-                sellrecord.MobileModel = record.MobileModel;
-                sellrecord.Price = record.Price;
-                sellrecord.SellDate = record.SellDate;
-                dbContext.Entry(sellrecord).State = EntityState.Modified;
-                await dbContext.SaveChangesAsync();
-                return record;
-            }
-            return null;
+            sellrecord.Id = record.Id;
+            sellrecord.BrandId = record.BrandId;
+            sellrecord.MobileModel = record.MobileModel;
+            sellrecord.Price = record.Price;
+            sellrecord.SellDate = record.SellDate;
+            dbContext.Entry(sellrecord).State = EntityState.Modified;
+            var result = await dbContext.SaveChangesAsync();
+            return "Record Updated Successfully";
         }
         public IEnumerable<MobileStoreReport> GetSellReport(DateTime fromdt, DateTime todt)
         {

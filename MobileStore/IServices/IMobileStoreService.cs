@@ -12,8 +12,8 @@ namespace MobileStore.IServices
         Task<MobileSellRecord> GetSellRecordById(int _id);
         IEnumerable<MobileStoreReport> GetSellReport(DateTime fromdt, DateTime todt);
         IEnumerable<MobileStoreRecord> GetSellRecord(DateTime _fromdt, DateTime _dtto);
-        Task<MobileStoreRecord> AddSellRecord(MobileStoreRecord _record);
-        Task<MobileStoreRecord> UpdateSellRecord(MobileStoreRecord _record);
+        Task<string> AddSellRecord(MobileStoreRecord _record);
+        Task<string> UpdateSellRecord(MobileStoreRecord _record);
         Task<string> DeleteSellRecord(int _id);
         Task<string> GetBestPrice(int _brandId, string _model);
     }

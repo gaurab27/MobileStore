@@ -35,7 +35,7 @@ namespace MobileStore.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpGet]
@@ -54,7 +54,7 @@ namespace MobileStore.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpGet]
@@ -73,7 +73,7 @@ namespace MobileStore.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpGet]
@@ -92,7 +92,7 @@ namespace MobileStore.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpPost]
@@ -105,9 +105,9 @@ namespace MobileStore.Controllers
                 var result = await MobileStoreService.AddSellRecord(record);
                 return Ok(result);
             }
-            catch
+            catch(Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpPut]
@@ -117,8 +117,8 @@ namespace MobileStore.Controllers
         {
             try
             {
-                var checkData = await MobileStoreService.GetSellRecordById(record.Id);
-                if (checkData != null)
+                
+                if (record != null)
                 {
                     var result = await MobileStoreService.UpdateSellRecord(record);
                     return Ok(result);
@@ -130,7 +130,7 @@ namespace MobileStore.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpDelete]
@@ -153,7 +153,7 @@ namespace MobileStore.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
     }
