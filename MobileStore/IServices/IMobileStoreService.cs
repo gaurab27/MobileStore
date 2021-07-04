@@ -10,6 +10,7 @@ namespace MobileStore.IServices
     {
         IEnumerable<MobileStoreRecord> GetSellRecord();
         Task<MobileSellRecord> GetSellRecordById(int _id);
+        IEnumerable<MobileStoreReport> GetSellReport(DateTime fromdt, DateTime todt);
         IEnumerable<MobileStoreRecord> GetSellRecord(DateTime _fromdt, DateTime _dtto);
         Task<MobileStoreRecord> AddSellRecord(MobileStoreRecord _record);
         Task<MobileStoreRecord> UpdateSellRecord(MobileStoreRecord _record);

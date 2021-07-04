@@ -46,7 +46,26 @@ namespace MobileStore.Controllers
             try
             {
                 var record = MobileStoreService.GetSellRecord(from, to);
-                if (record != null)
+                if (record.Count() > 0)
+                {
+                    return Ok(record);
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+        [HttpGet]
+        [Route("[action]")]
+        [Route("api/MobileStore/GetSellReport")]
+        public IActionResult GetSellReport(DateTime from, DateTime to)
+        {
+            try
+            {
+                var record = MobileStoreService.GetSellReport(from, to);
+                if (record.Count() > 0)
                 {
                     return Ok(record);
                 }

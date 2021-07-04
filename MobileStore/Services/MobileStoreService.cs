@@ -15,11 +15,10 @@ namespace MobileStore.Services
         {
             dbContext = _db;
         }
-
         public async Task<MobileStoreRecord> AddSellRecord(MobileStoreRecord record)
         {
             MobileSellRecord sellrecord = new MobileSellRecord();
-            if(record != null)
+            if (record != null)
             {
                 sellrecord.Id = record.Id;
                 sellrecord.BrandId = record.BrandId;
@@ -32,61 +31,51 @@ namespace MobileStore.Services
             }
             return null;
         }
-
         public async Task<string> DeleteSellRecord(int id)
         {
             try
             {
                 var record = await dbContext.MobileSellRecords.FirstOrDefaultAsync(x => x.Id == id);
-                if(record != null)
+                if (record != null)
                 {
-                dbContext.Entry(record).State = EntityState.Deleted;
-                await dbContext.SaveChangesAsync();
-                return "Success";
+                    dbContext.Entry(record).State = EntityState.Deleted;
+                    await dbContext.SaveChangesAsync();
+                    return "Success";
                 }
                 else
                 {
                     throw new Exception("Record Not Found");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new NotImplementedException();
+                throw new Exception(ex.Message);
             }
         }
-
         public async Task<string> GetBestPrice(int _brandId, string _model)
         {
             string bestPrice = await dbContext.MobileSellRecords.Where(x => x.BrandId == _brandId && x.MobileModel == _model).MinAsync(p => p.Price);
             return bestPrice;
         }
-
         public IEnumerable<MobileStoreRecord> GetSellRecord()
-        {
-            var record = from sr in dbContext.MobileSellRecords join
-                         br in dbContext.MobileBrandRecords
-                         on sr.BrandId equals br.Id
-                         select new MobileStoreRecord{ Id = sr.Id, BrandId = br.Id, MobileBrand = br.MobileBrand, MobileModel = sr.MobileModel, Price = sr.Price,SellDate = sr.SellDate};
-            return record;        
-        }
-
-        public IEnumerable<MobileStoreRecord> GetSellRecord(DateTime fromdt, DateTime todt)
         {
             var record = from sr in dbContext.MobileSellRecords
                          join
-                         br in dbContext.MobileBrandRecords
-                         on sr.BrandId equals br.Id
-                         where sr.SellDate >= fromdt && sr.SellDate <= todt
-                         select new MobileStoreRecord {Id=sr.Id, BrandId=br.Id, MobileBrand = br.MobileBrand, MobileModel = sr.MobileModel, Price = sr.Price, SellDate = sr.SellDate };
+br in dbContext.MobileBrandRecords
+on sr.BrandId equals br.Id
+                         select new MobileStoreRecord { Id = sr.Id, BrandId = br.Id, MobileBrand = br.MobileBrand, MobileModel = sr.MobileModel, Price = sr.Price, SellDate = sr.SellDate };
             return record;
         }
-
+        public IEnumerable<MobileStoreRecord> GetSellRecord(DateTime fromdt, DateTime todt)
+        {
+            return (from sr in dbContext.MobileSellRecords
+                    where sr.SellDate >= fromdt && sr.SellDate <= todt
+                    select new MobileStoreRecord { Id = sr.Id, BrandId = sr.Brand.Id, MobileBrand = sr.Brand.MobileBrand, MobileModel = sr.MobileModel, Price = sr.Price, SellDate = sr.SellDate }).ToList();
+        }
         public async Task<MobileSellRecord> GetSellRecordById(int _id)
         {
-            var result = await dbContext.MobileSellRecords.Where(x => x.Id == _id).FirstOrDefaultAsync();
-            return result;
+            return await dbContext.MobileSellRecords.Where(x => x.Id == _id).FirstOrDefaultAsync();
         }
-
         public async Task<MobileStoreRecord> UpdateSellRecord(MobileStoreRecord record)
         {
             MobileSellRecord sellrecord = new MobileSellRecord();
@@ -102,6 +91,11 @@ namespace MobileStore.Services
                 return record;
             }
             return null;
+        }
+        public IEnumerable<MobileStoreReport> GetSellReport(DateTime fromdt, DateTime todt)
+        {
+            return (from sr in dbContext.MobileBrandRecords
+                    select new MobileStoreReport { MobileBrand = sr.MobileBrand, SellRecord = sr.MobileSellRecords.Where(x => x.SellDate >= fromdt && x.SellDate <= todt).ToList() }).ToList();
         }
     }
 }

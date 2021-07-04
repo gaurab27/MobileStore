@@ -21,4 +21,9 @@ namespace MobileStore.Models
         [Required]
         public DateTime SellDate { get; set; }
     }
+    public class MobileStoreReport
+    {
+        public string MobileBrand { get; set; }
+        public List<MobileSellRecord> SellRecord { get; set; }
+    }
 }
