@@ -92,7 +92,7 @@ namespace MobileStore.Services
         public IEnumerable<MobileStoreDiscountReportView> GetProfitLossReport(DateTime fromdt, DateTime todt)
         {
             return (from sr in dbContext.MobileBrandRecords
-                    select new MobileStoreDiscountReportView { MobileBrand = sr.MobileBrand, Record = sr.MobileSellRecords.Select(x => new MobileStoreDiscountReport { MobileModel = x.MobileModel, MarketPrice = x.MarketPrice, SellPrice = x.Price, SellDate = x.SellDate }).OrderBy(X => X.SellDate).ToList() }).ToList();
+                    select new MobileStoreDiscountReportView { MobileBrand = sr.MobileBrand, Record = sr.MobileSellRecords.Where(x => x.SellDate >= fromdt && x.SellDate <= todt).Select(x => new MobileStoreDiscountReport { MobileModel = x.MobileModel, MarketPrice = x.MarketPrice, SellPrice = x.Price, SellDate = x.SellDate }).OrderBy(X => X.SellDate).ToList() }).ToList();
         }
     }
 }
