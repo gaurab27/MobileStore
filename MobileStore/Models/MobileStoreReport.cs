@@ -1,27 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MobileStore.Models
 {
-    public class MobileStoreRecord
+    public class MobileStoreDiscountReport
     {
-        public int Id { get; set; }
-        [Required]
-        public int BrandId { get; set; }
         public string MobileBrand { get; set; }
-        [Required]
-        [MaxLength(50)]
         public string MobileModel { get; set; }
-        [Required]
-        [MaxLength(10)]
         public string Price { get; set; }
-        [Required]
-        [MaxLength(10)]
         public string MarketPrice { get; set; }
-        [Required]
         public DateTime SellDate { get; set; }
+        public int Discount => ((int.Parse(MarketPrice) - int.Parse(Price)) * 100) / int.Parse(MarketPrice);
+    }
+    public class MobileStoreReport
+    {
+        public string MobileBrand { get; set; }
+        public List<MobileStoreRecord> SellRecord { get; set; }
     }
 }

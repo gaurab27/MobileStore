@@ -23,9 +23,10 @@ namespace MobileStore.Services
             sellrecord.MobileModel = record.MobileModel;
             sellrecord.Price = record.Price;
             sellrecord.SellDate = record.SellDate;
+            sellrecord.MarketPrice = record.MarketPrice;
             dbContext.MobileSellRecords.Add(sellrecord);
             var result = await dbContext.SaveChangesAsync();
-            return "Data has been saved with id" + result;
+            return "Data has been saved";
         }
         public async Task<string> DeleteSellRecord(int id)
         {
@@ -58,13 +59,13 @@ namespace MobileStore.Services
             return from sr in dbContext.MobileSellRecords
                          join br in dbContext.MobileBrandRecords
                          on sr.BrandId equals br.Id
-                         select new MobileStoreRecord { Id = sr.Id, BrandId = br.Id, MobileBrand = br.MobileBrand, MobileModel = sr.MobileModel, Price = sr.Price, SellDate = sr.SellDate };
+                         select new MobileStoreRecord { Id = sr.Id, BrandId = br.Id, MobileBrand = br.MobileBrand, MobileModel = sr.MobileModel, Price = sr.Price, SellDate = sr.SellDate, MarketPrice = sr.MarketPrice };
         }
         public IEnumerable<MobileStoreRecord> GetSellRecord(DateTime fromdt, DateTime todt)
         {
             return (from sr in dbContext.MobileSellRecords
                     where sr.SellDate >= fromdt && sr.SellDate <= todt
-                    select new MobileStoreRecord { Id = sr.Id, BrandId = sr.Brand.Id, MobileBrand = sr.Brand.MobileBrand, MobileModel = sr.MobileModel, Price = sr.Price, SellDate = sr.SellDate }).ToList();
+                    select new MobileStoreRecord { Id = sr.Id, BrandId = sr.Brand.Id, MobileBrand = sr.Brand.MobileBrand, MobileModel = sr.MobileModel, Price = sr.Price, SellDate = sr.SellDate, MarketPrice = sr.MarketPrice}).ToList();
         }
         public async Task<MobileSellRecord> GetSellRecordById(int _id)
         {
@@ -78,6 +79,7 @@ namespace MobileStore.Services
             sellrecord.MobileModel = record.MobileModel;
             sellrecord.Price = record.Price;
             sellrecord.SellDate = record.SellDate;
+            sellrecord.MarketPrice = record.MarketPrice;
             dbContext.Entry(sellrecord).State = EntityState.Modified;
             var result = await dbContext.SaveChangesAsync();
             return "Record Updated Successfully";
@@ -85,7 +87,12 @@ namespace MobileStore.Services
         public IEnumerable<MobileStoreReport> GetSellReport(DateTime fromdt, DateTime todt)
         {
             return (from sr in dbContext.MobileBrandRecords
-                    select new MobileStoreReport { MobileBrand = sr.MobileBrand, SellRecord = sr.MobileSellRecords.Where(x => x.SellDate >= fromdt && x.SellDate <= todt).ToList() }).ToList();
+                    select new MobileStoreReport { MobileBrand = sr.MobileBrand, SellRecord = sr.MobileSellRecords.Where(x => x.SellDate >= fromdt && x.SellDate <= todt).Select(s => new MobileStoreRecord { Id = s.Id, BrandId = s.BrandId, MarketPrice = s.MarketPrice, MobileModel = s.MobileModel, Price = s.Price, SellDate = s.SellDate, MobileBrand = sr.MobileBrand }).ToList() }).ToList();
+        }
+        public IEnumerable<MobileStoreDiscountReport> GetProfitLossReport(DateTime fromdt, DateTime todt)
+        {
+            return (from sr in dbContext.MobileSellRecords
+                    select new MobileStoreDiscountReport {MobileBrand = sr.Brand.MobileBrand, MobileModel = sr.MobileModel, MarketPrice = sr.MarketPrice, Price = sr.Price,SellDate = sr.SellDate} ).ToList();
         }
     }
 }

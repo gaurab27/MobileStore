@@ -59,6 +59,25 @@ namespace MobileStore.Controllers
         }
         [HttpGet]
         [Route("[action]")]
+        [Route("api/MobileStore/GetProfitLossReport")]
+        public IActionResult GetProfitLossReport(DateTime from, DateTime to)
+        {
+            try
+            {
+                var record = MobileStoreService.GetProfitLossReport(from, to);
+                if (record.Count() > 0)
+                {
+                    return Ok(record);
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpGet]
+        [Route("[action]")]
         [Route("api/MobileStore/GetSellReport")]
         public IActionResult GetSellReport(DateTime from, DateTime to)
         {

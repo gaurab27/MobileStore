@@ -12,6 +12,7 @@ namespace MobileStore.Models
         public int BrandId { get; set; }
         public string Price { get; set; }
         public DateTime SellDate { get; set; }
+        public string MarketPrice { get; set; }
 
         public virtual MobileBrandRecord Brand { get; set; }
     }

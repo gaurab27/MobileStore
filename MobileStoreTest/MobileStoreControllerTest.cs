@@ -61,13 +61,13 @@ namespace MobileStoreTest
             int count = 5;
             DateTime fromdt = DateTime.Parse("2021-07-04");
             DateTime todt = DateTime.Parse("2021-07-07");
-            var fakeRecords = A.CollectionOfDummy<MobileStoreReport>(count).AsEnumerable();
+            var fakeRecords = A.CollectionOfDummy<MobileStoreDiscountReport>(count).AsEnumerable();
             var dataStore = A.Fake<IMobileStoreService>();
             A.CallTo(() => dataStore.GetSellReport(fromdt, todt)).Returns(fakeRecords);
             var controller = new MobileStoreController(dataStore);
             var actionresult = controller.GetSellReport(fromdt, todt);
             var result = actionresult as OkObjectResult;
-            var returnRecord = result.Value as IEnumerable<MobileStoreReport>;
+            var returnRecord = result.Value as IEnumerable<MobileStoreDiscountReport>;
             Assert.Equal(count, returnRecord.Count());
         }
         [Fact]

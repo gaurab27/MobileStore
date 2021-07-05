@@ -57,6 +57,11 @@ namespace MobileStore.Models
                     .HasMaxLength(10)
                     .IsFixedLength(true);
 
+                entity.Property(e => e.MarketPrice)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsFixedLength(true);
+
                 entity.Property(e => e.SellDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Brand)
