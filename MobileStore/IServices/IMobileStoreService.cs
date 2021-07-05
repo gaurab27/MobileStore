@@ -16,6 +16,6 @@ namespace MobileStore.IServices
         Task<string> UpdateSellRecord(MobileStoreRecord _record);
         Task<string> DeleteSellRecord(int _id);
         Task<string> GetBestPrice(int _brandId, string _model);
-        IEnumerable<MobileStoreDiscountReport> GetProfitLossReport(DateTime fromdt, DateTime todt);
+        IEnumerable<MobileStoreDiscountReportView> GetProfitLossReport(DateTime fromdt, DateTime todt);
     }
 }

@@ -17,7 +17,7 @@ namespace MobileStore.Models
         public string MobileModel { get; set; }
         [Required]
         [MaxLength(10)]
-        public string Price { get; set; }
+        public string SellPrice { get; set; }
         [Required]
         [MaxLength(10)]
         public string MarketPrice { get; set; }
