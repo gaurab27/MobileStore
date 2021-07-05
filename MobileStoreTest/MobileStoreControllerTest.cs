@@ -100,7 +100,6 @@ namespace MobileStoreTest
         [Fact]
         public async Task UpdateSellRecord()
         {
-            int id = 1;
             string message = "Data Updated Successfully";
             var fakeRecords = A.Fake<MobileStoreRecord>();
             var dataStore = A.Fake<IMobileStoreService>();
